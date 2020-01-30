@@ -117,6 +117,8 @@ cdef class PyBoltz:
         self.Decor_Colls = 0
         self.Decor_Step = 0
         self.Decor_LookBacks = 0
+        self.WhichRandom = 0
+        self.NcollSuppressionInElimits = 10
 
         # Calculated Constants 
         self.CONST1 = 0.0
@@ -187,6 +189,7 @@ cdef class PyBoltz:
         self.ReducedIonization=0.0
         self.ReducedAttachment=0.0
         self.MixObject = Gasmix()
+        
 
     def end(self):
         """
@@ -265,6 +268,7 @@ cdef class PyBoltz:
         For more info on the main output variables check the git repository readme:
         `PyBoltz repository <https://github.com/UTA-REST/MAGBOLTZ-py/>`_
         """
+        
         setSeed(self.RandomSeed)
         ELimNotYetFixed=1
 
@@ -276,6 +280,8 @@ cdef class PyBoltz:
 
         # Set up the simulation
         Setups.Setup(self)
+
+        if self.ConsoleOutputFlag : print("seed = " + str(self.RandomSeed))
 
         # Find the electron upper energy limit
         if self.FinalElectronEnergy == 0.0:
@@ -295,7 +301,7 @@ cdef class PyBoltz:
         else:
             # Given a specified upper energy limit, use it
             MixerFunc(self)
-        
+               
         if self.ConsoleOutputFlag : print("Calculated the final energy = " + str(self.FinalElectronEnergy))
 
         # Run the simulation
